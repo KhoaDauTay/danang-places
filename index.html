@@ -1,604 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Food & Dating Places - Khám phá thành phố của tôi</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-        }
-
-        .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            color: #667eea;
-            transform: translateY(-2px);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 100px 2rem 2rem;
-            min-height: 100vh;
-        }
-
-        .page {
-            display: none;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Home Page Styles */
-        .hero {
-            text-align: center;
-            padding: 4rem 0;
-            color: white;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        .hero-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 2rem;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            font-size: 1rem;
-            opacity: 0.8;
-        }
-
-        .featured-section {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 3rem;
-            margin: 3rem 0;
-            backdrop-filter: blur(10px);
-        }
-
-        .featured-section h2 {
-            color: #333;
-            margin-bottom: 2rem;
-            font-size: 2rem;
-        }
-
-        .featured-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .featured-card {
-            background: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .featured-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .featured-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-        }
-
-        .featured-card h3 {
-            margin-bottom: 0.5rem;
-            color: #333;
-        }
-
-        .featured-card p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        /* Places Page Styles */
-        .page-header {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            backdrop-filter: blur(10px);
-        }
-
-        .page-header h1 {
-            color: #333;
-            margin-bottom: 1rem;
-            font-size: 2.5rem;
-        }
-
-        .controls {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .search-box {
-            flex: 1;
-            min-width: 250px;
-            padding: 12px 20px;
-            border: 2px solid #e1e5e9;
-            border-radius: 25px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .search-box:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid #667eea;
-            color: #667eea;
-        }
-
-        .btn-outline:hover {
-            background: #667eea;
-            color: white;
-        }
-
-        .filters {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 8px 16px;
-            border: 2px solid #e1e5e9;
-            background: white;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .filter-btn.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-
-        .view-toggle {
-            display: flex;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .view-btn {
-            padding: 10px 15px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .view-btn.active {
-            background: #667eea;
-            color: white;
-        }
-
-        .places-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-
-        .places-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .place-card {
-            background: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .place-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .place-card.list-view {
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .place-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-        }
-
-        .list-view .place-image {
-            width: 150px;
-            height: 100px;
-            margin-bottom: 0;
-        }
-
-        .place-info h3 {
-            margin-bottom: 0.5rem;
-            color: #333;
-            font-size: 1.3rem;
-        }
-
-        .place-meta {
-            display: flex;
-            gap: 1rem;
-            margin: 0.5rem 0;
-            flex-wrap: wrap;
-        }
-
-        .place-tag {
-            background: #f1f3f4;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            color: #666;
-        }
-
-        .place-status {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .status-btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .status-btn.visited {
-            background: #28a745;
-            color: white;
-        }
-
-        .status-btn.wishlist {
-            background: #ffc107;
-            color: #333;
-        }
-
-        .status-btn.favorite {
-            background: #dc3545;
-            color: white;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 2000;
-            padding: 2rem;
-            overflow-y: auto;
-        }
-
-        .modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            max-width: 800px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 2rem;
-            cursor: pointer;
-            color: #666;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .file-upload {
-            border: 2px dashed #e1e5e9;
-            border-radius: 10px;
-            padding: 2rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .file-upload:hover {
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.05);
-        }
-
-        .file-upload input {
-            display: none;
-        }
-
-        .image-preview {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 10px;
-            margin-top: 1rem;
-        }
-
-        /* Menu Styles */
-        .menu-section {
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 2px solid #f1f3f4;
-        }
-
-        .menu-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-        }
-
-        .menu-item-info h4 {
-            margin-bottom: 0.5rem;
-            color: #333;
-        }
-
-        .menu-item-info p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .menu-price {
-            font-weight: bold;
-            color: #667eea;
-            font-size: 1.1rem;
-        }
-
-        .csv-import {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero-stats {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .search-box {
-                min-width: auto;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .places-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .place-card.list-view {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .list-view .place-image {
-                width: 100%;
-                height: 200px;
-            }
-
-            .modal {
-                padding: 1rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <!-- Navigation -->
@@ -670,6 +77,9 @@
                 <button class="view-btn" onclick="setView('list')">☰ Danh sách</button>
             </div>
             <button class="btn btn-primary" onclick="showModal('addPlaceModal')">➕ Thêm địa điểm</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Xuất dữ liệu</button>
+            <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData()">
+            <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📥 Nhập dữ liệu</button>
         </div>
 
         <div class="filters" id="categoryFilters">
@@ -700,7 +110,7 @@
             <p>Chia sẻ những khám phá mới của bạn</p>
         </div>
 
-        <div style="background: white; border-radius: 20px; padding: 2rem;">
+        <div class="form-container">
             <form id="addPlaceForm" onsubmit="addPlace(event)">
                 <div class="form-row">
                     <div class="form-group">
@@ -740,7 +150,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Hình ảnh</label>
+                    <label>Hình ảnh địa điểm</label>
                     <div class="file-upload" onclick="document.getElementById('placeImage').click()">
                         <input type="file" id="placeImage" name="image" accept="image/*" onchange="previewImage(this, 'imagePreview')">
                         <div>📷 Chọn hình ảnh</div>
@@ -765,7 +175,7 @@
                     </div>
                 </div>
 
-                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <div class="form-actions">
                     <button type="submit" class="btn btn-primary">💾 Lưu địa điểm</button>
                     <button type="reset" class="btn btn-secondary">🔄 Làm mới</button>
                 </div>
@@ -812,7 +222,7 @@
                 <label>Ghi chú</label>
                 <textarea name="notes" rows="3"></textarea>
             </div>
-            <div style="display: flex; gap: 1rem;">
+            <div class="form-actions">
                 <button type="submit" class="btn btn-primary">💾 Lưu</button>
                 <button type="button" class="btn btn-secondary" onclick="hideModal('addPlaceModal')">Hủy</button>
             </div>
@@ -820,514 +230,88 @@
     </div>
 </div>
 
-<script>
-    // Data storage
-    let places = JSON.parse(localStorage.getItem('places') || '[]');
-    let currentView = 'grid';
-    let currentFilter = 'all';
+<!-- Edit Place Modal -->
+<div id="editPlaceModal" class="modal">
+    <div class="modal-content">
+        <button class="modal-close" onclick="hideModal('editPlaceModal')">&times;</button>
+        <h2>✏️ Chỉnh sửa địa điểm</h2>
 
-    // Initialize app
-    document.addEventListener('DOMContentLoaded', function() {
-        updateStats();
-        updateFeaturedContent();
-        displayPlaces();
-        updateCategoryFilters();
+        <!-- Tab Navigation -->
+        <div class="edit-tabs">
+            <button class="edit-tab-btn active" onclick="switchEditTab('info')">📍 Thông tin</button>
+            <button class="edit-tab-btn" onclick="switchEditTab('menu')">🍽️ Menu</button>
+        </div>
 
-        // Search functionality
-        document.getElementById('searchBox').addEventListener('input', displayPlaces);
-    });
+        <!-- Info Tab -->
+        <div id="editInfoTab" class="edit-tab-content active">
+            <form id="editPlaceForm" onsubmit="updatePlace(event)">
+                <input type="hidden" id="editPlaceId" name="id">
 
-    // Navigation functions
-    function showPage(pageId) {
-        // Hide all pages
-        document.querySelectorAll('.page').forEach(page => {
-            page.classList.remove('active');
-        });
-
-        // Show selected page
-        document.getElementById(pageId).classList.add('active');
-
-        // Update navigation
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.classList.remove('active');
-        });
-        event.target.classList.add('active');
-
-        // Update content based on page
-        if (pageId === 'places') {
-            displayPlaces();
-        } else if (pageId === 'favorites') {
-            displayFavorites();
-        } else if (pageId === 'home') {
-            updateStats();
-            updateFeaturedContent();
-        }
-    }
-
-    // Modal functions
-    function showModal(modalId) {
-        document.getElementById(modalId).classList.add('active');
-    }
-
-    function hideModal(modalId) {
-        document.getElementById(modalId).classList.remove('active');
-    }
-
-    // Place management functions
-    function addPlace(event) {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-
-        const place = {
-            id: Date.now(),
-            name: formData.get('name'),
-            category: formData.get('category'),
-            address: formData.get('address'),
-            phone: formData.get('phone') || '',
-            bookingLink: formData.get('bookingLink') || '',
-            notes: formData.get('notes') || '',
-            image: formData.get('image') ? URL.createObjectURL(formData.get('image')) : '',
-            menu: currentMenu,
-            dateAdded: new Date().toLocaleDateString('vi-VN'),
-            status: 'wishlist',
-            favorite: false
-        };
-
-        places.push(place);
-        localStorage.setItem('places', JSON.stringify(places));
-
-        // Reset form and menu
-        event.target.reset();
-        currentMenu = [];
-        document.getElementById('menuItems').innerHTML = '';
-        document.getElementById('imagePreview').style.display = 'none';
-
-        updateStats();
-        updateFeaturedContent();
-        displayPlaces();
-        updateCategoryFilters();
-
-        alert('Đã thêm địa điểm thành công!');
-    }
-
-    function quickAddPlace(event) {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-
-        const place = {
-            id: Date.now(),
-            name: formData.get('name'),
-            category: formData.get('category'),
-            address: formData.get('address'),
-            phone: '',
-            bookingLink: '',
-            notes: formData.get('notes') || '',
-            image: '',
-            menu: [],
-            dateAdded: new Date().toLocaleDateString('vi-VN'),
-            status: 'wishlist',
-            favorite: false
-        };
-
-        places.push(place);
-        localStorage.setItem('places', JSON.stringify(places));
-
-        hideModal('addPlaceModal');
-        event.target.reset();
-
-        updateStats();
-        updateFeaturedContent();
-        displayPlaces();
-        updateCategoryFilters();
-
-        alert('Đã thêm địa điểm thành công!');
-    }
-
-    function deletePlace(id) {
-        if (confirm('Bạn có chắc muốn xóa địa điểm này?')) {
-            places = places.filter(place => place.id !== id);
-            localStorage.setItem('places', JSON.stringify(places));
-
-            updateStats();
-            updateFeaturedContent();
-            displayPlaces();
-            updateCategoryFilters();
-        }
-    }
-
-    function toggleStatus(id, status) {
-        const place = places.find(p => p.id === id);
-        if (place) {
-            place.status = place.status === status ? 'wishlist' : status;
-            localStorage.setItem('places', JSON.stringify(places));
-            updateStats();
-            displayPlaces();
-        }
-    }
-
-    function toggleFavorite(id) {
-        const place = places.find(p => p.id === id);
-        if (place) {
-            place.favorite = !place.favorite;
-            localStorage.setItem('places', JSON.stringify(places));
-            updateStats();
-            displayPlaces();
-            displayFavorites();
-        }
-    }
-
-    // Display functions
-    function displayPlaces() {
-        const container = document.getElementById('placesContainer');
-        const searchTerm = document.getElementById('searchBox').value.toLowerCase();
-
-        let filteredPlaces = places.filter(place => {
-            const matchesSearch = place.name.toLowerCase().includes(searchTerm) ||
-                place.address.toLowerCase().includes(searchTerm) ||
-                place.category.toLowerCase().includes(searchTerm);
-            const matchesFilter = currentFilter === 'all' || place.category === currentFilter;
-            return matchesSearch && matchesFilter;
-        });
-
-        container.className = currentView === 'grid' ? 'places-grid' : 'places-list';
-        container.innerHTML = '';
-
-        if (filteredPlaces.length === 0) {
-            container.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #666;">
-                        <h3>Không tìm thấy địa điểm nào</h3>
-                        <p>Thử thay đổi từ khóa tìm kiếm hoặc bộ lọc</p>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tên địa điểm *</label>
+                        <input type="text" id="editPlaceName" name="name" required>
                     </div>
-                `;
-            return;
-        }
-
-        filteredPlaces.forEach(place => {
-            const card = createPlaceCard(place);
-            container.appendChild(card);
-        });
-    }
-
-    function createPlaceCard(place) {
-        const card = document.createElement('div');
-        card.className = `place-card ${currentView === 'list' ? 'list-view' : ''}`;
-
-        const statusIcon = place.status === 'visited' ? '✅' : '📝';
-        const favoriteIcon = place.favorite ? '❤️' : '🤍';
-
-        card.innerHTML = `
-                ${place.image ? `<img src="${place.image}" alt="${place.name}" class="place-image">` : ''}
-                <div class="place-info">
-                    <h3>${place.name}</h3>
-                    <div class="place-meta">
-                        <span class="place-tag">${place.category}</span>
-                        <span class="place-tag">📍 ${place.address}</span>
-                        ${place.phone ? `<span class="place-tag">📞 ${place.phone}</span>` : ''}
-                    </div>
-                    ${place.notes ? `<p style="color: #666; margin: 0.5rem 0;">${place.notes}</p>` : ''}
-                    <div class="place-status">
-                        <button class="status-btn ${place.status === 'visited' ? 'visited' : ''}"
-                                onclick="toggleStatus(${place.id}, 'visited')">
-                            ${place.status === 'visited' ? '✅ Đã đến' : '📝 Muốn thử'}
-                        </button>
-                        <button class="status-btn ${place.favorite ? 'favorite' : ''}"
-                                onclick="toggleFavorite(${place.id})">
-                            ${place.favorite ? '❤️ Yêu thích' : '🤍 Yêu thích'}
-                        </button>
-                        <button class="btn btn-outline" onclick="showPlaceDetail(${place.id})" style="padding: 6px 12px; font-size: 0.8rem;">
-                            👁️ Chi tiết
-                        </button>
-                        <button class="btn btn-secondary" onclick="deletePlace(${place.id})" style="padding: 6px 12px; font-size: 0.8rem;">
-                            🗑️ Xóa
-                        </button>
+                    <div class="form-group">
+                        <label>Loại hình</label>
+                        <select id="editPlaceCategory" name="category" required>
+                            <option value="Nhà hàng">🍽️ Nhà hàng</option>
+                            <option value="Quán cafe">☕ Quán cafe</option>
+                            <option value="Bar">🍺 Bar</option>
+                            <option value="Ăn vặt">🍿 Ăn vặt</option>
+                            <option value="Buffet">🍴 Buffet</option>
+                            <option value="Fast food">🍔 Fast food</option>
+                            <option value="Dessert">🍰 Dessert</option>
+                            <option value="Giải trí">🎮 Giải trí</option>
+                            <option value="Khác">📍 Khác</option>
+                        </select>
                     </div>
                 </div>
-            `;
 
-        return card;
-    }
-
-    function displayFavorites() {
-        const container = document.getElementById('favoritesContainer');
-        const favoriteePlaces = places.filter(place => place.favorite);
-
-        container.innerHTML = '';
-
-        if (favoriteePlaces.length === 0) {
-            container.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #666;">
-                        <h3>Chưa có địa điểm yêu thích</h3>
-                        <p>Hãy đánh dấu ❤️ những địa điểm bạn thích nhất</p>
-                    </div>
-                `;
-            return;
-        }
-
-        favoriteePlaces.forEach(place => {
-            const card = createPlaceCard(place);
-            container.appendChild(card);
-        });
-    }
-
-    function showPlaceDetail(id) {
-        const place = places.find(p => p.id === id);
-        if (!place) return;
-
-        const content = document.getElementById('placeDetailContent');
-        content.innerHTML = `
-                <div style="text-align: center; margin-bottom: 2rem;">
-                    ${place.image ? `<img src="${place.image}" alt="${place.name}" style="max-width: 100%; max-height: 300px; border-radius: 15px; margin-bottom: 1rem;">` : ''}
-                    <h2>${place.name}</h2>
-                    <p style="color: #666; font-size: 1.1rem;">${place.category} • ${place.address}</p>
+                <div class="form-group">
+                    <label>Địa chỉ *</label>
+                    <input type="text" id="editPlaceAddress" name="address" required>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-                    ${place.phone ? `<div><strong>📞 Điện thoại:</strong><br>${place.phone}</div>` : ''}
-                    ${place.bookingLink ? `<div><strong>🔗 Đặt bàn:</strong><br><a href="${place.bookingLink}" target="_blank">Đặt ngay</a></div>` : ''}
-                    <div><strong>📅 Ngày thêm:</strong><br>${place.dateAdded}</div>
-                    <div><strong>📊 Trạng thái:</strong><br>${place.status === 'visited' ? '✅ Đã đến' : '📝 Muốn thử'}</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Số điện thoại</label>
+                        <input type="tel" id="editPlacePhone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label>Link đặt bàn</label>
+                        <input type="url" id="editPlaceBooking" name="bookingLink">
+                    </div>
                 </div>
 
-                ${place.notes ? `
-                    <div style="margin-bottom: 2rem;">
-                        <h3>📝 Ghi chú</h3>
-                        <p style="background: #f8f9fa; padding: 1rem; border-radius: 10px;">${place.notes}</p>
-                    </div>
-                ` : ''}
-
-                ${place.menu && place.menu.length > 0 ? `
-                    <div class="menu-section">
-                        <h3>🍽️ Thực đơn (${place.menu.length} món)</h3>
-                        ${place.menu.map(item => `
-                            <div class="menu-item">
-                                <div class="menu-item-info">
-                                    <h4>${item.name}</h4>
-                                    ${item.description ? `<p>${item.description}</p>` : ''}
-                                </div>
-                                <div class="menu-price">${item.price ? item.price.toLocaleString() + ' VNĐ' : 'Chưa có giá'}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                ` : ''}
-            `;
-
-        showModal('placeDetailModal');
-    }
-
-    // Menu management
-    let currentMenu = [];
-
-    function addMenuItem() {
-        const menuContainer = document.getElementById('menuItems');
-        const itemId = Date.now();
-
-        const menuItem = document.createElement('div');
-        menuItem.className = 'menu-item';
-        menuItem.innerHTML = `
-                <div style="flex: 1; display: grid; grid-template-columns: 2fr 1fr 2fr auto; gap: 1rem; align-items: center;">
-                    <input type="text" placeholder="Tên món" onchange="updateMenuItem(${itemId}, 'name', this.value)">
-                    <input type="number" placeholder="Giá" onchange="updateMenuItem(${itemId}, 'price', this.value)">
-                    <input type="text" placeholder="Mô tả" onchange="updateMenuItem(${itemId}, 'description', this.value)">
-                    <button type="button" onclick="removeMenuItem(${itemId})" style="background: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer;">🗑️</button>
+                <div class="form-group">
+                    <label>Ghi chú cá nhân</label>
+                    <textarea id="editPlaceNotes" name="notes" rows="4"></textarea>
                 </div>
-            `;
 
-        menuContainer.appendChild(menuItem);
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">💾 Cập nhật thông tin</button>
+                    <button type="button" class="btn btn-secondary" onclick="hideModal('editPlaceModal')">Hủy</button>
+                </div>
+            </form>
+        </div>
 
-        currentMenu.push({
-            id: itemId,
-            name: '',
-            price: 0,
-            description: ''
-        });
-    }
+        <!-- Menu Tab -->
+        <div id="editMenuTab" class="edit-tab-content">
+            <div class="menu-edit-section">
+                <h3>🍽️ Quản lý thực đơn</h3>
+                <div class="menu-controls">
+                    <button type="button" class="btn btn-primary" onclick="addEditMenuItem()">➕ Thêm món mới</button>
+                    <button type="button" class="btn btn-outline" onclick="saveMenuChanges()">💾 Lưu thay đổi menu</button>
+                </div>
 
-    function updateMenuItem(id, field, value) {
-        const item = currentMenu.find(m => m.id === id);
-        if (item) {
-            item[field] = field === 'price' ? parseInt(value) || 0 : value;
-        }
-    }
-
-    function removeMenuItem(id) {
-        currentMenu = currentMenu.filter(m => m.id !== id);
-        document.querySelector(`[onclick*="${id}"]`).closest('.menu-item').remove();
-    }
-
-    // CSV Import
-    function importCSV(input) {
-        const file = input.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const csv = e.target.result;
-            const lines = csv.split('\n');
-            const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
-
-            for (let i = 1; i < lines.length; i++) {
-                const data = lines[i].split(',');
-                if (data.length >= 2) {
-                    addMenuItem();
-                    const lastItem = currentMenu[currentMenu.length - 1];
-                    lastItem.name = data[0]?.trim() || '';
-                    lastItem.price = parseInt(data[1]?.trim()) || 0;
-                    lastItem.description = data[2]?.trim() || '';
-
-                    // Update the UI
-                    const menuItems = document.querySelectorAll('#menuItems .menu-item');
-                    const lastMenuItem = menuItems[menuItems.length - 1];
-                    const inputs = lastMenuItem.querySelectorAll('input');
-                    inputs[0].value = lastItem.name;
-                    inputs[1].value = lastItem.price;
-                    inputs[2].value = lastItem.description;
-                }
-            }
-
-            alert(`Đã import ${currentMenu.length} món từ file CSV!`);
-        };
-        reader.readAsText(file);
-    }
-
-    // Utility functions
-    function setView(view) {
-        currentView = view;
-        document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
-        displayPlaces();
-    }
-
-    function setFilter(category) {
-        currentFilter = category;
-        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
-        displayPlaces();
-    }
-
-    function updateCategoryFilters() {
-        const container = document.getElementById('categoryFilters');
-        const categories = ['all', ...new Set(places.map(p => p.category))];
-
-        container.innerHTML = '';
-        categories.forEach(category => {
-            const btn = document.createElement('button');
-            btn.className = `filter-btn ${currentFilter === category ? 'active' : ''}`;
-            btn.textContent = category === 'all' ? 'Tất cả' : category;
-            btn.onclick = () => setFilter(category);
-            container.appendChild(btn);
-        });
-    }
-
-    function updateStats() {
-        document.getElementById('totalPlaces').textContent = places.length;
-        document.getElementById('totalDishes').textContent = places.reduce((sum, place) => sum + (place.menu?.length || 0), 0);
-        document.getElementById('visitedPlaces').textContent = places.filter(p => p.status === 'visited').length;
-        document.getElementById('favoriteCount').textContent = places.filter(p => p.favorite).length;
-    }
-
-    function updateFeaturedContent() {
-        // Featured places
-        const featuredPlaces = places.filter(p => p.favorite || p.status === 'visited').slice(0, 6);
-        const featuredPlacesContainer = document.getElementById('featuredPlaces');
-        featuredPlacesContainer.innerHTML = '';
-
-        if (featuredPlaces.length === 0) {
-            featuredPlacesContainer.innerHTML = '<p style="text-align: center; color: #666; grid-column: 1/-1;">Chưa có địa điểm nổi bật. Hãy thêm và đánh dấu yêu thích!</p>';
-        } else {
-            featuredPlaces.forEach(place => {
-                const card = document.createElement('div');
-                card.className = 'featured-card';
-                card.onclick = () => showPlaceDetail(place.id);
-                card.innerHTML = `
-                        ${place.image ? `<img src="${place.image}" alt="${place.name}">` : '<div style="height: 200px; background: #f1f3f4; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; color: #666;">📷 Chưa có ảnh</div>'}
-                        <h3>${place.name}</h3>
-                        <p>${place.category} • ${place.address}</p>
-                    `;
-                featuredPlacesContainer.appendChild(card);
-            });
-        }
-
-        // Featured dishes
-        const allDishes = places.flatMap(place =>
-            (place.menu || []).map(dish => ({...dish, placeName: place.name}))
-        ).slice(0, 6);
-
-        const featuredDishesContainer = document.getElementById('featuredDishes');
-        featuredDishesContainer.innerHTML = '';
-
-        if (allDishes.length === 0) {
-            featuredDishesContainer.innerHTML = '<p style="text-align: center; color: #666; grid-column: 1/-1;">Chưa có món ăn nào. Hãy thêm thực đơn cho các địa điểm!</p>';
-        } else {
-            allDishes.forEach(dish => {
-                const card = document.createElement('div');
-                card.className = 'featured-card';
-                card.innerHTML = `
-                        <div style="height: 200px; background: linear-gradient(45deg, #667eea, #764ba2); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; color: white; font-size: 3rem;">🍽️</div>
-                        <h3>${dish.name}</h3>
-                        <p><strong>${dish.placeName}</strong> • ${dish.price ? dish.price.toLocaleString() + ' VNĐ' : 'Giá chưa có'}</p>
-                    `;
-                featuredDishesContainer.appendChild(card);
-            });
-        }
-    }
-
-    function previewImage(input, previewId) {
-        const file = input.files[0];
-        const preview = document.getElementById(previewId);
-
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-
-    // Export/Import functions
-    function exportData() {
-        const data = {
-            places: places,
-            exportDate: new Date().toISOString(),
-            version: '1.0'
-        };
-
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `food-places-${new Date().toISOString().split('T')[0]}.json`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }
-
-    // Sample data for demonstration
-    if (places.length === 0) {
-        places = [
-            {
-                id: 1,
-                name: "Phở Hà Nội",
-                category: "Nhà hàng",
-                address: "123 Nguyễn Huệ, Q1",
-                phone: "0901234567",
-                bookingLink: "",
-                notes: "Phở ngon, nước dùng đậm đà",
-                image: "",
-                menu: [
-                    {id: 1, name: "Phở bò", price: 45000, description: "Phở bò truyền thống"},
-                    {id: 2, name: "Phở gà", price: 40000, description: "Phở gà nước trong"}
-                ],
-                dateAdded: "01/01/2024",
-                status: "visited",
-                favorite: true
-            }
-        ];
-        localStorage.setItem('places', JSON.stringify(places));
-    }
-</script>
+                <div id="editMenuItems" class="edit-menu-container">
+                    <!-- Menu items will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="index.js"></script>
 </body>
 </html>
